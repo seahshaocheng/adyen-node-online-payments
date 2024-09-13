@@ -10,6 +10,7 @@ async function initCheckout() {
       locale: "en_US",
       environment: "test",
       showPayButton: true,
+      showRemovePaymentMethodButton:true,
       paymentMethodsConfiguration: {
         ideal: {
           showImage: true,

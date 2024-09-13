@@ -50,6 +50,12 @@ app.post("/api/getPaymentMethods", async (req, res) => {
     const response = await checkout.PaymentsApi.paymentMethods({
       channel: "Web",
       merchantAccount: process.env.ADYEN_MERCHANT_ACCOUNT,
+      countryCode:"SG",
+      amount: {
+        currency: "SGD",
+        value: 1000,
+      },
+      shopperReference: "markdemo123",
     });
     res.json(response);
   } catch (err) {
@@ -73,7 +79,10 @@ app.post("/api/initiatePayment", async (req, res) => {
     const protocol = req.socket.encrypted? 'https' : 'http';    
     // Ideally the data passed here should be computed based on business logic
     const response = await checkout.PaymentsApi.payments({
-      amount: { currency, value: 1000 }, // value is 10€ in minor units
+      amount: {
+        currency: "SGD",
+        value: 1000,
+      }, // value is 10€ in minor units
       reference: orderRef, // required
       merchantAccount: process.env.ADYEN_MERCHANT_ACCOUNT, // required
       channel: "Web", // required
@@ -99,10 +108,12 @@ app.post("/api/initiatePayment", async (req, res) => {
           ? null
           : req.body.billingAddress,
       deliveryDate: new Date("2017-07-17T13:42:40.428+01:00"),
-      shopperStatement: "Aceitar o pagamento até 15 dias após o vencimento.Não cobrar juros. Não aceitar o pagamento com cheque",
+      shopperStatement: "MarkSeahSG",
+      storePaymentMethod: true,
+      shopperReference: "markdemo123",
+      recurringProcessingModel: "CardOnFile",
       // Below fields are required for Klarna:
       countryCode: req.body.paymentMethod.type.includes("klarna") ? "DE" : null,
-      shopperReference: "12345",
       shopperEmail: "youremail@email.com",
       shopperLocale: "en_US",
       lineItems: [
